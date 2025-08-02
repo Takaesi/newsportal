@@ -1,0 +1,59 @@
+from django.contrib.auth.models import User
+from main.models import Author, Category, Post, Comment
+
+user1 = User.objects.create_user(username='john')
+user2 = User.objects.create_user(username='anna')
+
+author1 = Author.objects.create(user=user1)
+author2 = Author.objects.create(user=user2)
+
+cat1 = Category.objects.create(category='Политика')
+cat2 = Category.objects.create(category='Наука')
+cat3 = Category.objects.create(category='Спорт')
+cat4 = Category.objects.create(category='Культура')
+
+post1 = Post.objects.create(author=author1, post_type='AR', title='Первая статья', text='Текст первой статьи...')
+post2 = Post.objects.create(author=author2, post_type='AR', title='Вторая статья', text='Текст второй статьи...')
+post3 = Post.objects.create(author=author1, post_type='NE', title='Срочная новость', text='Текст новости...')
+
+post1.categories.add(cat1, cat2)
+post2.categories.add(cat3)
+post3.categories.add(cat4)
+
+comment1 = Comment.objects.create(post=post1, user=user2, text='Отличная статья!')
+comment2 = Comment.objects.create(post=post1, user=user1, text='Спасибо за отзыв!')
+comment3 = Comment.objects.create(post=post2, user=user1, text='Хорошо написано.')
+comment4 = Comment.objects.create(post=post3, user=user2, text='Интересная новость.')
+
+post1.like()
+post1.like()
+post2.like()
+post3.dislike()
+
+comment1.like()
+comment2.dislike()
+comment3.like()
+comment4.like()
+comment4.like()
+
+author1.update_rating()
+author2.update_rating()
+
+best_author = Author.objects.order_by('-rating').first()
+print(f'\nЛучший автор: {best_author.user.username}, рейтинг: {best_author.rating}')
+
+best_post = Post.objects.order_by('-rating').first()
+print(f'\nЛучшая статья:')
+print(f'Дата: {best_post.date_time}')
+print(f'Автор: {best_post.author.user.username}')
+print(f'Рейтинг: {best_post.rating}')
+print(f'Заголовок: {best_post.title}')
+print(f'Превью: {best_post.preview()}')
+
+print(f'\nКомментарии к статье "{best_post.title}":')
+comments = Comment.objects.filter(post=best_post)
+for c in comments:
+    print(f'\nДата: {c.date_time}')
+    print(f'Пользователь: {c.user.username}')
+    print(f'Рейтинг: {c.rating}')
+    print(f'Комментарий: {c.text}')
