@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}News Portal{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1><a href="/">News Portal</a></h1>
+        <nav>
+            <a href="/news/">Все новости</a>
+        </nav>
+    </header>
+
+    <hr>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>&copy; 2025 News Portal</p>
+    </footer>
+</body>
+</html>

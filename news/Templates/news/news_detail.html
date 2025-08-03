@@ -1,0 +1,9 @@
+{% extends "default.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ post.title }}</h2>
+    <p><strong>Дата публикации:</strong> {{ post.date_time|date:"d.m.Y H:i" }}</p>
+    <p>{{ post.text }}</p>
+{% endblock %}
